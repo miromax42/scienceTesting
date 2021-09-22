@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ScienceTesting</string>
+    <string name="averageTimeText">Среднее время:</string>
+    <string name="lastTimeText">Последнее время:</string>
+    <string name="allTimeText">Прошло времени:</string>
+    <string name="f_ms">%s мс</string>
+    <string name="f_s">%s сек</string>
+</resources>
