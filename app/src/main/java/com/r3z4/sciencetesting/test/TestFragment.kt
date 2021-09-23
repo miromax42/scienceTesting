@@ -1,5 +1,6 @@
 package com.r3z4.sciencetesting.test
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -33,12 +34,19 @@ class TestFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel=viewModel
 
+        viewModel.isMeasuring.observe(viewLifecycleOwner, {
+            if (it) binding.reationButton.setBackgroundColor(Color.GREEN) else binding.reationButton.setBackgroundColor(Color.WHITE)
+        })
+
+
 
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+
 
     }
 
