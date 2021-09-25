@@ -5,4 +5,5 @@
     <string name="allTimeText">Прошло времени:</string>
     <string name="f_ms">%s мс</string>
     <string name="f_s">%s сек</string>
+    <string name="calibrationText">Калибровка</string>
 </resources>

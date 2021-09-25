@@ -85,7 +85,37 @@ class TestViewModel : ViewModel() {
         isMeasuring.value=false
         timer.cancel()
     }
+
+
+    //calibration
+    val isCalibrating=MutableLiveData(false)
+    val calibrationText=Transformations.map(isCalibrating){ if (it)  "Остановить" else "Откалибровать"}
+
+    val phoneDelay=MutableLiveData(0L)
+
+    fun toggleCalibration(){
+        isCalibrating.value=!(isCalibrating.value)!!
+        if (isCalibrating.value!!){
+            startRecording()
+        }else{
+            stopRecording()
+        }
+    }
+    fun calibrationSensorInput(){
+        isCalibrating.value=!(isCalibrating.value)!!
+    }
+
+    fun startRecording(){
+
+    }
+
+
+    fun stopRecording(){
+
+    }
+    //new calibration
+
+    private fun Float.format(digits: Int): String  = "%.${digits}f".format(this)
 }
 
-private fun Float.format(digits: Int): String  = "%.${digits}f".format(this)
 
