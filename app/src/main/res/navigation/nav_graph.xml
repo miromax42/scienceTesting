@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/testFragment">
+
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.r3z4.sciencetesting.test.TestFragment"
+        android:label="TestFragment" >
+        <action
+            android:id="@+id/action_testFragment_to_calibrationkFragment"
+            app:destination="@id/calibrationkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calibrationkFragment"
+        android:name="com.r3z4.sciencetesting.calibration.CalibrationFragment"
+        android:label="calibrationk_fragment"
+        tools:layout="@layout/calibration_fragment" >
+        <action
+            android:id="@+id/action_calibrationkFragment_to_testFragment"
+            app:destination="@id/testFragment" />
+    </fragment>
+</navigation>

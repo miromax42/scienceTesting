@@ -23,6 +23,7 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
 
     fun stop() {
         mIsRunning = false
+
     }
 
     @SuppressLint("MissingPermission")
@@ -32,7 +33,8 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
         mIsRunning = true
         val buffSize = AudioRecord.getMinBufferSize(
             format.getSampleRateInHz(),
-            format.getChannelConfig(), format.getAudioFormat()
+            format.getChannelConfig(),
+            format.getAudioFormat()
         )
         if (buffSize == AudioRecord.ERROR) {
             System.err.println("getMinBufferSize returned ERROR")

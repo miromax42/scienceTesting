@@ -6,7 +6,8 @@
         <entry key="..\:/Users/Miromax/AndroidStudioProjects/ScienceTesting/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Miromax/AndroidStudioProjects/ScienceTesting/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Miromax/AndroidStudioProjects/ScienceTesting/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Miromax/AndroidStudioProjects/ScienceTesting/app/src/main/res/layout/test_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Miromax/AndroidStudioProjects/ScienceTesting/app/src/main/res/layout/calibration_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/Miromax/AndroidStudioProjects/ScienceTesting/app/src/main/res/layout/test_fragment.xml" value="0.20520833333333333" />
       </map>
     </option>
   </component>

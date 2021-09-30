@@ -5,7 +5,7 @@ import android.media.AudioFormat.ENCODING_PCM_16BIT
 
 class AudioFormatInfo {
     fun getSampleRateInHz(): Int {
-        return 44100
+        return 8000
     }
 
     fun getChannelConfig(): Int {
