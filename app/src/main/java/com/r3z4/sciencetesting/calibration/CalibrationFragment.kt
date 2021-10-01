@@ -12,8 +12,16 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder.AudioSource
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import com.r3z4.sciencetesting.AudioReciever
+import com.r3z4.sciencetesting.R
+import com.r3z4.sciencetesting.audio.AudioFormatInfo
+import com.r3z4.sciencetesting.databinding.CalibrationFragmentBinding
+import com.r3z4.sciencetesting.databinding.TestFragmentBinding
+import com.r3z4.sciencetesting.test.TestViewModel
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
@@ -26,11 +34,21 @@ class CalibrationFragment : Fragment() {
     }
 
     private lateinit var viewModel: CalibrationViewModel
+    private lateinit var binding: CalibrationFragmentBinding
+    private lateinit var audioFormatInfo: AudioFormatInfo
+    private lateinit var audioReceiver: AudioReciever
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = DataBindingUtil.inflate(
+            inflater,R.layout.calibration_fragment,container,false)
+        val application = requireNotNull(this.activity).application
+        viewModel = ViewModelProvider(this).get(CalibrationViewModel::class.java)
+        binding.lifecycleOwner = this
+        binding.viewModel=viewModel
 
         if (ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -38,7 +56,36 @@ class CalibrationFragment : Fragment() {
             ActivityCompat.requestPermissions(requireActivity(), permissions,0)
         }
 
-        return inflater.inflate(com.r3z4.sciencetesting.R.layout.calibration_fragment, container, false)
+        audioFormatInfo=AudioFormatInfo()
+        audioReceiver=AudioReciever(audioFormatInfo)
+        audioReceiver.addHandler { p1->viewModel.wav.value!!.add(p1) }
+
+        var recordingThread:Thread
+
+        binding.buttonStart.setOnClickListener {
+            viewModel.wav.value= mutableListOf()
+            viewModel.taps.value= mutableListOf()
+            viewModel.startWav.value=System.currentTimeMillis()
+            recordingThread=Thread{
+                Log.i("thread","start thread")
+                audioReceiver.run()
+            }
+            recordingThread.start()
+        }
+
+        binding.buttonStop.setOnClickListener {
+            audioReceiver.stop()
+        }
+
+        binding.buttonShow.setOnClickListener {
+            viewModel.show()
+        }
+        binding.buttonView.setOnClickListener {
+            Log.i("audio","view tapped")
+            viewModel.taps.value?.add(System.currentTimeMillis())
+        }
+
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,63 +93,6 @@ class CalibrationFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(CalibrationViewModel::class.java)
         // TODO: Use the ViewModel
     }
-    var recordingThread: Thread? = null
-    var isRecording = false
 
-
-    var audioSource = AudioSource.MIC
-    var sampleRateInHz = 44100
-    var channelConfig: Int = AudioFormat.CHANNEL_IN_MONO
-    var audioFormat: Int = AudioFormat.ENCODING_PCM_16BIT
-    var bufferSizeInBytes = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat)
-
-    var Data = ByteArray(bufferSizeInBytes)
-
-    @SuppressLint("MissingPermission")
-    var audioRecorder: AudioRecord? = AudioRecord(
-        audioSource,
-        sampleRateInHz,
-        channelConfig,
-        audioFormat,
-        bufferSizeInBytes)
-
-
-    fun startRecording() {
-        audioRecorder!!.startRecording()
-        isRecording = true
-        recordingThread = Thread {
-            val filepath = requireContext().getExternalFilesDir(null)?.absolutePath
-            var os: FileOutputStream? = null
-            try {
-                os = FileOutputStream("$filepath/record.pcm")
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            }
-            while (isRecording) {
-                audioRecorder!!.read(Data, 0, Data.size)
-                try {
-                    os!!.write(Data, 0, bufferSizeInBytes)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                try {
-                    os!!.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        recordingThread!!.start()
-    }
-
-    fun stopRecording() {
-        if (null != audioRecorder) {
-            isRecording = false
-            audioRecorder!!.stop()
-            audioRecorder!!.release()
-            audioRecorder = null
-            recordingThread = null
-        }
-    }
 
 }

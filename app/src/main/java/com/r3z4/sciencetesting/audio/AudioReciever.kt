@@ -13,11 +13,11 @@ import com.r3z4.sciencetesting.audio.AudioFormatInfo
 
 class AudioReciever(format: AudioFormatInfo) : Runnable {
     private var mIsRunning: Boolean
-    private var handling: (ShortArray,Long) -> Unit = { shorts: ShortArray, l: Long -> }
+    private var handling: (ShortArray) -> Unit = { shorts: ShortArray -> }
     private val format: AudioFormatInfo
     private var mRecord: AudioRecord?
     private val BUFF_COUNT = 32
-    fun addHandler(handler: (ShortArray,Long) -> Unit) {
+    fun addHandler(handler: (ShortArray) -> Unit) {
         handling=handler
     }
 
@@ -105,7 +105,7 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
     }
 
     private fun sendMsg(data: ShortArray,time:Long) {
-        handling(data,time)
+        handling(data)
     }
 
     init {
