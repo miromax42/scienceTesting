@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,6 +17,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.r3z4.sciencetesting.AudioReciever
 import com.r3z4.sciencetesting.R
 import com.r3z4.sciencetesting.audio.AudioFormatInfo
@@ -79,6 +83,10 @@ class CalibrationFragment : Fragment() {
         viewModel.running.observe(viewLifecycleOwner){
             if (!it){
                 viewModel.show()
+
+                binding.chart.data=viewModel.dataForChart()
+                binding.chart.invalidate()
+                binding.chart.notifyDataSetChanged()
             }
         }
         binding.buttonAddDelay.setOnClickListener {
@@ -114,8 +122,13 @@ class CalibrationFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CalibrationViewModel::class.java)
+        binding.chart.setBackgroundColor(Color.WHITE)
+
 
     }
+
+
+
 
 
 }

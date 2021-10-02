@@ -1,15 +1,20 @@
 package com.r3z4.sciencetesting.calibration
 
+import android.graphics.Color
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.r3z4.sciencetesting.audio.AudioFormatInfo
 
 class CalibrationViewModel : ViewModel() {
     val wav= MutableLiveData(mutableListOf<ShortArray>())
     val startWav=MutableLiveData(0L)
     val taps=MutableLiveData(mutableListOf<Long>())
+
 
     val delay=MutableLiveData(0L)
     val delayArray=MutableLiveData(mutableListOf<Long>())
@@ -30,6 +35,9 @@ class CalibrationViewModel : ViewModel() {
     val showVisible=MutableLiveData(false)
     val startVisible=Transformations.map(showVisible){!it}
 
+    var mappedMicValues= listOf<Pair<Short,Long?>>()
+    var micValues= mutableListOf<Short>()
+
 
 
     fun show(){
@@ -44,14 +52,17 @@ class CalibrationViewModel : ViewModel() {
             (((1000f/(audioFormatInfo.getSampleRateInHz().toFloat()))*i.toFloat())).toInt()
         }
         Log.i("audio",indexToDelay(8000).toString())
-        val micValues= mutableListOf<Short>()
+        micValues= mutableListOf<Short>()
         wav.value?.forEach {
             it.forEach { s->
-                micValues.add(s)
+                if (s>0)
+                    micValues.add(s)
+                else
+                    micValues.add((-s).toShort())
             }
         }
 
-        var mappedMicValues=micValues.mapIndexed() { i,elem->
+        mappedMicValues=micValues.mapIndexed() { i,elem->
             Pair(elem, startWav.value?.plus(indexToDelay(i)))
         }
 
@@ -84,6 +95,28 @@ class CalibrationViewModel : ViewModel() {
 
 
         return mappedMicValues.toString()
+    }
+
+    fun dataForChart(): LineData {
+        val values = micValues.mapIndexed() { i,sh->
+            Entry(i.toFloat(), sh.toFloat())
+        }
+        val set1 = LineDataSet(values, "amplitude")
+        set1.setDrawIcons(false);
+        set1.enableDashedLine(10f, 5f, 0f);
+        set1.enableDashedHighlightLine(10f, 5f, 0f);
+        set1.color = Color.DKGRAY;
+        set1.setCircleColor(Color.DKGRAY);
+        set1.lineWidth = 1f;
+        set1.circleRadius = 3f;
+        set1.setDrawCircleHole(false)
+        set1.setDrawCircles(false)
+        set1.valueTextSize = 9f;
+        set1.setDrawFilled(true);
+        set1.formLineWidth = 1f;
+
+        return LineData(set1)
+
     }
 }
 

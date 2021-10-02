@@ -78,12 +78,12 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
         }
         try {
             mRecord!!.startRecording()
+            startTime=System.currentTimeMillis()
         } catch (e: IllegalStateException) {
             e.printStackTrace()
             return
         }
         var count = 0
-        startTime=System.currentTimeMillis()
         while (mIsRunning) {
             val samplesRead = mRecord!!.read(buffers[count], 0, buffers[count].count())
             if (samplesRead == AudioRecord.ERROR_INVALID_OPERATION) {

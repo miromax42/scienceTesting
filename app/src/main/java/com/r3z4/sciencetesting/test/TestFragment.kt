@@ -53,36 +53,7 @@ class TestFragment : Fragment() {
 
         binding.buttonCalibrate.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.calibrationkFragment, null))
 
-//        val audioFormatInfo=AudioFormatInfo()
-//        val audioReceiver=AudioReciever(audioFormatInfo)
-//        audioReceiver.addHandler { p1,p2->wav.add(Pair(p1,p2)) }
 
-//        var recordingThread:Thread
-
-//        binding.buttonToggleCalibration.setOnClickListener {
-//            if (!viewModel.isCalibrating.value!!){
-//                wav= mutableListOf<Pair<ShortArray,Long>>()
-//                taps= mutableListOf<Long>()
-//                recordingThread=Thread{
-//                    Log.i("thread","start thread")
-//                    audioReceiver.run()
-//                }
-//                recordingThread.start()
-//                viewModel.isCalibrating.value=!(viewModel.isCalibrating.value!!)
-//            }else{
-//                audioReceiver.stop()
-//                viewModel.isCalibrating.value=!(viewModel.isCalibrating.value!!)
-//
-//            }
-//        }
-//
-//        binding.buttonShow.setOnClickListener {
-//            Log.i("audio",printWav(wav))
-//            Log.i("audio",taps.toString())
-//        }
-//        binding.buttonCalibration.setOnClickListener {
-//            taps.add(System.currentTimeMillis())
-//        }
 
         return binding.root
     }
