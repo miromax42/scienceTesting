@@ -12,6 +12,10 @@
         <action
             android:id="@+id/action_testFragment_to_calibrationkFragment"
             app:destination="@id/calibrationkFragment" />
+        <argument
+            android:name="delay"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
     <fragment
         android:id="@+id/calibrationkFragment"

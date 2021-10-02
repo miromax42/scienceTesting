@@ -21,57 +21,102 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/textDelayValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:text="@{@string/f_ms(viewModel.delay)}"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonAddDelay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonStart" />
+            app:layout_constraintTop_toTopOf="@+id/buttonAddDelay" />
+
+        <TextView
+            android:id="@+id/textAverageDelayValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/f_ms(viewModel.averageDelay)}"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonBackWithDelay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buttonBackWithDelay" />
 
         <TextView
             android:id="@+id/textDelayText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginStart="16dp"
             android:text="delay:"
-            app:layout_constraintEnd_toStartOf="@+id/textDelayValue"
-            app:layout_constraintHorizontal_bias="0.298"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonAddDelay"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonStart" />
+            app:layout_constraintTop_toTopOf="@+id/buttonAddDelay" />
+
+        <TextView
+            android:id="@+id/textAverageDelay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="average delay:"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonBackWithDelay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buttonBackWithDelay" />
 
         <Button
             android:id="@+id/buttonStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:text="STOP"
             app:layout_constraintBottom_toBottomOf="@+id/buttonStart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/buttonStart" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/buttonStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
             android:text="START"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/buttonShow"
+            android:id="@+id/buttonAddDelay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SHOW"
-            app:layout_constraintBottom_toBottomOf="@+id/buttonStart"
-            app:layout_constraintEnd_toStartOf="@+id/buttonStart"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="16dp"
+            android:text="+"
+            app:layout_constraintEnd_toEndOf="@+id/buttonStop"
+            app:layout_constraintStart_toStartOf="@+id/buttonStop"
+            app:layout_constraintTop_toBottomOf="@+id/buttonStop" />
+
+        <Button
+            android:id="@+id/buttonBackWithDelay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="save"
+            app:layout_constraintEnd_toEndOf="@+id/buttonStop"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/buttonStop"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddDelay" />
+
+        <Button
+            android:id="@+id/buttonReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="RESET"
+            app:layout_constraintEnd_toEndOf="@+id/buttonStop"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/buttonStop"
+            app:layout_constraintTop_toBottomOf="@+id/buttonBackWithDelay" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

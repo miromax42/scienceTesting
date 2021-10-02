@@ -7,24 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.media.AudioFormat
-import android.media.AudioRecord
-import android.media.MediaRecorder.AudioSource
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import com.r3z4.sciencetesting.AudioReciever
 import com.r3z4.sciencetesting.R
 import com.r3z4.sciencetesting.audio.AudioFormatInfo
 import com.r3z4.sciencetesting.databinding.CalibrationFragmentBinding
-import com.r3z4.sciencetesting.databinding.TestFragmentBinding
-import com.r3z4.sciencetesting.test.TestViewModel
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 
 
 class CalibrationFragment : Fragment() {
@@ -59,10 +52,12 @@ class CalibrationFragment : Fragment() {
         audioFormatInfo=AudioFormatInfo()
         audioReceiver=AudioReciever(audioFormatInfo)
         audioReceiver.addHandler { p1->viewModel.wav.value!!.add(p1) }
+        audioReceiver.addEndHandler { viewModel.running.value=false }
 
         var recordingThread:Thread
 
         binding.buttonStart.setOnClickListener {
+            viewModel.running.value=true
             viewModel.wav.value= mutableListOf()
             viewModel.taps.value= mutableListOf()
             viewModel.startWav.value=System.currentTimeMillis()
@@ -75,23 +70,47 @@ class CalibrationFragment : Fragment() {
 
         binding.buttonStop.setOnClickListener {
             audioReceiver.stop()
+//            viewModel.running.value=false
+
+        }
+        viewModel.running.observe(viewLifecycleOwner){
+            if (!it){
+                viewModel.show()
+            }
+        }
+        binding.buttonAddDelay.setOnClickListener {
+            if (viewModel.delay.value!=0L) {
+                viewModel.delayArray.value!!.add(viewModel.delay.value!!)
+                viewModel.delayArray.value=viewModel.delayArray.value
+                Log.d("audio",viewModel.delayArray.value.toString())
+            }
         }
 
-        binding.buttonShow.setOnClickListener {
-            viewModel.show()
+        binding.buttonReset.setOnClickListener {
+            viewModel.delayArray.value= mutableListOf()
         }
+
+
         binding.buttonView.setOnClickListener {
             Log.i("audio","view tapped")
             viewModel.taps.value?.add(System.currentTimeMillis())
         }
 
-        return binding.root
-    }
+//        binding.buttonBackWithDelay.setOnClickListener {
+//            Navigation.createNavigateOnClickListener(
+//                R.id.testFragment,
+//                bundleOf("amount" to (viewModel.averageDelay.value ?: 0L))
+//            )
+//        }
+
+            return binding.root
+        }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CalibrationViewModel::class.java)
-        // TODO: Use the ViewModel
+
     }
 
 

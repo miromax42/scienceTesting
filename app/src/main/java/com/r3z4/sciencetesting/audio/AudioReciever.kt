@@ -7,11 +7,13 @@ import android.media.MediaRecorder
 import java.lang.IllegalStateException
 import android.media.AudioFormat;
 import android.os.Handler;
+import android.os.Looper
 import android.os.Process;
 import com.r3z4.sciencetesting.audio.AudioFormatInfo
 
 
 class AudioReciever(format: AudioFormatInfo) : Runnable {
+    private var endHandler: ()->Unit={}
     private var mIsRunning: Boolean
     private var handling: (ShortArray) -> Unit = { shorts: ShortArray -> }
     private val format: AudioFormatInfo
@@ -19,6 +21,9 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
     private val BUFF_COUNT = 32
     fun addHandler(handler: (ShortArray) -> Unit) {
         handling=handler
+    }
+    fun addEndHandler(handler: () -> Unit){
+        endHandler=handler
     }
 
     fun stop() {
@@ -87,7 +92,7 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
             }
 
             // посылаем оповещение обработчикам
-            sendMsg(buffers[count],System.currentTimeMillis())
+            sendMsg(buffers[count])
             count = (count + 1) % BUFF_COUNT
         }
         try {
@@ -101,10 +106,18 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
             // освобождаем ресурсы
             mRecord!!.release()
             mRecord = null
+            // Get a handler that can be used to post to the main thread
+            val mainHandler = Handler(Looper.getMainLooper())
+
+            val myRunnable = Runnable() {
+                run {endHandler()} // This is your code
+            };
+            mainHandler.post(myRunnable);
+
         }
     }
 
-    private fun sendMsg(data: ShortArray,time:Long) {
+    private fun sendMsg(data: ShortArray) {
         handling(data)
     }
 
