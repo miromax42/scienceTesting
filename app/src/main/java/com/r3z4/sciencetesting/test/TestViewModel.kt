@@ -17,11 +17,13 @@ class TestViewModel : ViewModel() {
     val averageTime= MutableLiveData(0L)
     val allTime= MutableLiveData(0f)
 
-    val lastTimeS= Transformations.map(lastTime){it.toString()}
+    val lastTimeS= Transformations.map(lastTime){(it).toString()}
     val averageTimeS= Transformations.map(averageTime){it.toString()}
     val allTimeS= Transformations.map(allTime){
         it.format(1)
     }
+
+    val delayValue=MutableLiveData(0L)
 
     val isPlaying=MutableLiveData(false)
     val playingText=Transformations.map(isPlaying){ if (it)  "Стоп" else "Старт"}
@@ -50,7 +52,7 @@ class TestViewModel : ViewModel() {
         if (isMeasuring.value!!){
             isMeasuring.value=false
             timeEnd=System.currentTimeMillis()
-            lastTime.value=timeEnd-timeStart
+            lastTime.value=timeEnd-timeStart-(delayValue.value?:0L)
             cnt+=1
             averageTime.value=(averageTime.value!!*(cnt-1)/cnt)+(lastTime.value!!/cnt)
         }

@@ -14,6 +14,8 @@ import com.r3z4.sciencetesting.audio.AudioFormatInfo
 
 class AudioReciever(format: AudioFormatInfo) : Runnable {
     private var endHandler: ()->Unit={}
+    var startTime=0L
+//    private var startflag=true
     private var mIsRunning: Boolean
     private var handling: (ShortArray) -> Unit = { shorts: ShortArray -> }
     private val format: AudioFormatInfo
@@ -33,6 +35,7 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
 
     @SuppressLint("MissingPermission")
     override fun run() {
+
         // приоритет для потока обработки аудио
         Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
         mIsRunning = true
@@ -80,6 +83,7 @@ class AudioReciever(format: AudioFormatInfo) : Runnable {
             return
         }
         var count = 0
+        startTime=System.currentTimeMillis()
         while (mIsRunning) {
             val samplesRead = mRecord!!.read(buffers[count], 0, buffers[count].count())
             if (samplesRead == AudioRecord.ERROR_INVALID_OPERATION) {

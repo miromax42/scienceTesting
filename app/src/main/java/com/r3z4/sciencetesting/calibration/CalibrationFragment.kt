@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.r3z4.sciencetesting.AudioReciever
 import com.r3z4.sciencetesting.R
 import com.r3z4.sciencetesting.audio.AudioFormatInfo
@@ -60,7 +62,7 @@ class CalibrationFragment : Fragment() {
             viewModel.running.value=true
             viewModel.wav.value= mutableListOf()
             viewModel.taps.value= mutableListOf()
-            viewModel.startWav.value=System.currentTimeMillis()
+//            viewModel.startWav.value=System.currentTimeMillis()
             recordingThread=Thread{
                 Log.i("thread","start thread")
                 audioReceiver.run()
@@ -70,6 +72,7 @@ class CalibrationFragment : Fragment() {
 
         binding.buttonStop.setOnClickListener {
             audioReceiver.stop()
+            viewModel.startWav.value=audioReceiver.startTime
 //            viewModel.running.value=false
 
         }
@@ -96,12 +99,13 @@ class CalibrationFragment : Fragment() {
             viewModel.taps.value?.add(System.currentTimeMillis())
         }
 
-//        binding.buttonBackWithDelay.setOnClickListener {
-//            Navigation.createNavigateOnClickListener(
-//                R.id.testFragment,
-//                bundleOf("amount" to (viewModel.averageDelay.value ?: 0L))
-//            )
-//        }
+        binding.buttonBackWithDelay.setOnClickListener {
+            val bundle=bundleOf("delay" to viewModel.averageDelay.value)
+            findNavController().navigate(R.id.testFragment,bundle)
+
+    }
+
+
 
             return binding.root
         }

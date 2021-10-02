@@ -22,6 +22,10 @@ class CalibrationViewModel : ViewModel() {
         }
     }
     val running=MutableLiveData(false)
+    val startable=Transformations.map(running){ !it }
+    val stopable=Transformations.map(running){it}
+    val resetable=Transformations.map(delayArray){ it.isNotEmpty()  }
+    val addable=Transformations.map(delay){it!=0L}
 
     val showVisible=MutableLiveData(false)
     val startVisible=Transformations.map(showVisible){!it}
@@ -51,7 +55,12 @@ class CalibrationViewModel : ViewModel() {
             Pair(elem, startWav.value?.plus(indexToDelay(i)))
         }
 
+        mappedMicValues=mappedMicValues.filter {
+            val diff=((taps.value?.get(0) ?: 0L) - it.second!!)
+            ((diff<500L) and (diff>20L))
+        }
         mappedMicValues=mappedMicValues.sortedBy { -it.first }
+
 
 //        val delayArray= mutableListOf<Long>()
 //        taps.value?.forEach {tapTime->

@@ -47,6 +47,7 @@ class TestFragment : Fragment() {
         viewModel.isMeasuring.observe(viewLifecycleOwner, {
             if (it) binding.reationButton.setBackgroundColor(Color.GREEN) else binding.reationButton.setBackgroundColor(Color.WHITE)
         })
+        viewModel.delayValue.value =arguments?.getLong("delay")
 
 
 
